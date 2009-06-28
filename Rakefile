@@ -7,7 +7,7 @@ task :default => :test
 
 desc 'Spec the jpcalendar plugin.'
 Spec::Rake::SpecTask.new(:spec) do |t|
-  t.spec_opts = ['--color --format progress --loadby mtime --reverse']
+  t.spec_opts = ['--color --format specdoc --loadby mtime --reverse']
   t.spec_files = FileList['spec/**/*_spec.rb']
 end
 

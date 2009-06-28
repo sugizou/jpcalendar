@@ -54,14 +54,20 @@ describe DateTimeWrapper do
       @datetime = DateTimeWrapper.parse('2009-02-28 12:34:56+0900')
     end
 
-    it 'yyyymmddHHMMSSの形で返す' do 
+    it 'yyyymmddHHMMSSの形で返す' do
       @datetime.datetime.should == '20090228123456'
     end
     
-    it '引数1を渡すと年月日、引数2を渡すと時分秒をセパレートする' do 
+    it '引数1を渡すと年月日、引数2を渡すと時分秒をセパレートする' do
       @datetime.datetime('/',':').should == '2009/02/28 12:34:56'
     end
-    
+
+    it "引数1,2のどちらも空文字またはnilだった場合は引数なしと同じ挙動" do 
+      @datetime.datetime('', '').should == '20090228123456'
+      @datetime.datetime(nil, '').should == '20090228123456'
+      @datetime.datetime('', nil).should == '20090228123456'
+      @datetime.datetime(nil, nil).should == '20090228123456'
+    end
   end
   
   describe 'firstメソッドは' do 

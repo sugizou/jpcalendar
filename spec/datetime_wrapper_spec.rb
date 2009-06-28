@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../../lib/datetime_wrapper'
+require File.dirname(__FILE__) + '/../lib/datetime_wrapper'
 require 'date'
 
 describe DateTimeWrapper do   

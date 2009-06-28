@@ -5,41 +5,48 @@ require File.dirname(__FILE__) + '/../../lib/jpcalendar/template'
 describe "Template" do
   
   describe '定数BASEは' do
-      it '空およびnilではない' do
-        JPCalendar::Template::BASE.should_not be_nil
-        JPCalendar::Template::BASE.should_not == ''
-      end
+    it '空およびnilではない' do
+      JPCalendar::Template::BASE.should_not be_nil
+      JPCalendar::Template::BASE.should_not == ''
     end
-    
-    describe '定数HEADERは' do 
-      it '空およびnilではない' do 
-        JPCalendar::Template::HEADER.should_not be_nil
-        JPCalendar::Template::HEADER.should_not == ''
-      end
+  end
+  
+  describe '定数HEADERは' do 
+    it '空およびnilではない' do 
+      JPCalendar::Template::HEADER.should_not be_nil
+      JPCalendar::Template::HEADER.should_not == ''
     end
-    
-    describe '定数MENUは' do 
-      it '空およびnilではない' do 
-        JPCalendar::Template::MENU.should_not be_nil
-        JPCalendar::Template::MENU.should_not == ''
-      end
+  end
+  
+  describe '定数MENUは' do 
+    it '空およびnilではない' do 
+      JPCalendar::Template::MENU.should_not be_nil
+      JPCalendar::Template::MENU.should_not == ''
     end
-    
-    describe '定数WEEKは' do 
-      it '空およびnilではない' do 
-        JPCalendar::Template::WEEK.should_not be_nil
-        JPCalendar::Template::WEEK.should_not == ''
-      end
+  end
+  
+  describe '定数WEEKは' do 
+    it '空およびnilではない' do 
+      JPCalendar::Template::WEEK.should_not be_nil
+      JPCalendar::Template::WEEK.should_not == ''
     end
-    
-    describe '定数DAYは' do 
-      it '空およびnilではない' do 
-        JPCalendar::Template::DAY.should_not be_nil
-        JPCalendar::Template::DAY.should_not == ''
-      end
+  end
+  
+  describe '定数DAYは' do 
+    it '空およびnilではない' do 
+      JPCalendar::Template::DAY.should_not be_nil
+      JPCalendar::Template::DAY.should_not == ''
     end
-    
-    describe '定数CSSは' do 
+  end
+  
+  describe "定数LINKは" do 
+    it '空およびnilではない' do 
+      JPCalendar::Template::LINK.should_not be_nil
+      JPCalendar::Template::LINK.should_not == ''
+    end
+  end
+  
+  describe '定数CSSは' do 
       it '空およびnilではない' do 
         JPCalendar::Template::CSS.should_not be_nil
         JPCalendar::Template::CSS.should_not == ''

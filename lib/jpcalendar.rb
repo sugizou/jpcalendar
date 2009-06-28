@@ -6,7 +6,7 @@ require 'date'
 
 module JPCalendar
   
-  def create_calendar(date,options = { })
-    
+  def self.create_calendar(date,options = { })
+    return ''
   end
 end

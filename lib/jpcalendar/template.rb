@@ -34,6 +34,9 @@ module JPCalendar
     DAY = '<td id="%s">%s</td>
 '
 
+    LINK = '<a href="%s">%s</a>
+'
+
     CSS = '<script type="css/text">
 iframe #jpcalendar {
   width:200px;

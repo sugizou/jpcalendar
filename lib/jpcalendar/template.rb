@@ -34,8 +34,7 @@ module JPCalendar
     DAY = '<td id="%s">%s</td>
 '
 
-    LINK = '<a href="%s">%s</a>
-'
+    LINK = '<a href="%s">%s</a>'
 
     CSS = '<script type="css/text">
 iframe #jpcalendar {
@@ -68,6 +67,8 @@ td #td_holiday_unactive {
 td #td_day {
 }
 td #td_day_unactive {
+}
+td #td_day_mark {
 }
 </script>
 '

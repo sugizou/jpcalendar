@@ -144,6 +144,63 @@ describe JPCalendar::Create do
       last_week[6].should == ['td_day', 31]
     end
 
+    describe "optionsにmodelとmethodが指定されている場合" do 
+      it "その値を見て一致すればリンクを張る" do 
+        class SampleModel
+          attr_accessor :created_at
+          
+          def initialize(date)
+            @created_at = date
+          end
+        end
+        
+        models = ['2009-06-27','2009-06-30','2009-07-03', '2009-07-05'].map{|d| SampleModel.new(DateTime.parse(d)) }
+        
+        last_date = DateTimeWrapper.parse('2009-06-30')
+        @create = JPCalendar::Create.new(:model => models, :method => :created_at)
+        last_week = @create.last_week(last_date)
+        
+        last_week[0].should == ['td_holiday', 28]
+        last_week[1].should == ['td_day', 29]
+        last_week[2].should == ['td_day', '<a href="?created_at=20090630">30</a>']
+        last_week[3].should == ['td_day_unactive', 1]
+        last_week[4].should == ['td_day_unactive', 2]
+        last_week[5].should == ['td_day_unactive', '<a href="?created_at=20090703">3</a>']
+        last_week[6].should == ['td_day_unactive', 4]
+      end
+    end
+    
+    describe "optionsにmarkersが指定されている場合" do 
+      it "指定された日のcssのid名を変える" do 
+        markers = [Date.parse('2009-06-29')]
+        
+        last_date = DateTimeWrapper.parse('2009-06-30')
+        @create = JPCalendar::Create.new(:markers => markers)
+        last_week = @create.last_week(last_date)
+        last_week[0].should == ['td_holiday', 28]
+        last_week[1].should == ['td_day_mark',29]
+        last_week[2].should == ['td_day', 30]
+        last_week[3].should == ['td_day_unactive', 1]
+        last_week[4].should == ['td_day_unactive', 2]
+        last_week[5].should == ['td_day_unactive', 3]
+        last_week[6].should == ['td_day_unactive', 4]
+      end
+      
+      it "複数渡された場合、複数id名を変える" do 
+        markers = [Date.parse('2009-06-28'), Date.parse('2009-06-30'), Date.parse('2009-07-02')]
+        
+        last_date = DateTimeWrapper.parse('2009-06-30')
+        @create = JPCalendar::Create.new(:markers => markers)
+        last_week = @create.last_week(last_date)
+        last_week[0].should == ['td_day_mark', 28]
+        last_week[1].should == ['td_day', 29]
+        last_week[2].should == ['td_day_mark', 30]
+        last_week[3].should == ['td_day_unactive', 1]
+        last_week[4].should == ['td_day_mark', 2]
+        last_week[5].should == ['td_day_unactive', 3]
+        last_week[6].should == ['td_day_unactive', 4]
+      end
+    end
   end
 
   describe "other_weeksメソッドは" do 
@@ -207,6 +264,86 @@ describe JPCalendar::Create do
       other_weeks[2][4].should == ['td_day', 23]
       other_weeks[2][5].should == ['td_day', 24]
       other_weeks[2][6].should == ['td_day', 25]
+    end
+
+    describe "optionsにmodelとmethodが指定されている場合" do 
+      it "その値を見て一致すればリンクを張る" do 
+        class SampleModel
+          attr_accessor :created_at
+          
+          def initialize(date)
+            @created_at = date
+          end
+        end
+        
+        models = ['2009-06-05', '2009-06-11', '2009-06-14', '2009-06-22', '2009-06-27'].map{|d| SampleModel.new(DateTime.parse(d)) }
+        
+        first_date = DateTimeWrapper.parse('2009-06-01')
+        last_date = DateTimeWrapper.parse('2009-06-30')
+
+        @create = JPCalendar::Create.new(:model => models, :method => :created_at)
+        other_weeks = @create.other_weeks(first_date, last_date)
+        
+        other_weeks[0][0].should == ['td_holiday', 7]
+        other_weeks[0][1].should == ['td_day', 8]
+        other_weeks[0][2].should == ['td_day', 9]
+        other_weeks[0][3].should == ['td_day', 10]
+        other_weeks[0][4].should == ['td_day', '<a href="?created_at=20090611">11</a>']
+        other_weeks[0][5].should == ['td_day', 12]
+        other_weeks[0][6].should == ['td_day', 13]
+        
+        other_weeks[1][0].should == ['td_holiday', '<a href="?created_at=20090614">14</a>']
+        other_weeks[1][1].should == ['td_day', 15]
+        other_weeks[1][2].should == ['td_day', 16]
+        other_weeks[1][3].should == ['td_day', 17]
+        other_weeks[1][4].should == ['td_day', 18]
+        other_weeks[1][5].should == ['td_day', 19]
+        other_weeks[1][6].should == ['td_day', 20]
+        
+        other_weeks[2][0].should == ['td_holiday', 21]
+        other_weeks[2][1].should == ['td_day', '<a href="?created_at=20090622">22</a>']
+        other_weeks[2][2].should == ['td_day', 23]
+        other_weeks[2][3].should == ['td_day', 24]
+        other_weeks[2][4].should == ['td_day', 25]
+        other_weeks[2][5].should == ['td_day', 26]
+        other_weeks[2][6].should == ['td_day', '<a href="?created_at=20090627">27</a>']
+      end
+    end
+    
+    describe "optionsにmarkersが指定されている場合" do 
+      it "指定された日のcssのid名を変える" do 
+        markers = [Date.parse('2009-07-10'), Date.parse('2009-07-12'), Date.parse('2009-07-20'), Date.parse('2009-07-25')]
+        
+        first_date = DateTimeWrapper.parse('2009-07-01')
+        last_date = DateTimeWrapper.parse('2009-07-31')
+
+        @create = JPCalendar::Create.new(:markers => markers)
+        other_weeks = @create.other_weeks(first_date, last_date)
+        
+        other_weeks[0][0].should == ['td_holiday', 5]
+        other_weeks[0][1].should == ['td_day', 6]
+        other_weeks[0][2].should == ['td_day', 7]
+        other_weeks[0][3].should == ['td_day', 8]
+        other_weeks[0][4].should == ['td_day', 9]
+        other_weeks[0][5].should == ['td_day_mark', 10]
+        other_weeks[0][6].should == ['td_day', 11]
+        
+        other_weeks[1][0].should == ['td_day_mark', 12]
+        other_weeks[1][1].should == ['td_day', 13]
+        other_weeks[1][2].should == ['td_day', 14]
+        other_weeks[1][3].should == ['td_day', 15]
+        other_weeks[1][4].should == ['td_day', 16]
+        other_weeks[1][5].should == ['td_day', 17]
+        other_weeks[1][6].should == ['td_day', 18]
+        
+        other_weeks[2][0].should == ['td_holiday', 19]
+        other_weeks[2][1].should == ['td_day_mark', 20]
+        other_weeks[2][2].should == ['td_day', 21]
+        other_weeks[2][3].should == ['td_day', 22]
+        other_weeks[2][4].should == ['td_day', 23]
+        other_weeks[2][5].should == ['td_day', 24]
+        other_weeks[2][6].should == ['td_day_mark', 25]
+      end
     end
   end
   

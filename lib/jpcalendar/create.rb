@@ -27,7 +27,9 @@ module JPCalendar
         target = last_date - last_date.wday + wday
         css_id = target.wday == 0 ? 'td_holiday' : 'td_day'
         css_id += last_date.wday < target.wday ? '_unactive' : ''
-        res.push([css_id, target.mday])
+        css_id = marker(target) || css_id
+        day = anchor(target) || target.mday
+        res.push([css_id, day])
       end
       res
     end
@@ -42,15 +44,16 @@ module JPCalendar
         css_id = ''
         if target.wday == 0
           css_id = 'td_holiday'
-          if tmp_res != []
+          unless tmp_res.empty?
             res.push(tmp_res)
             tmp_res = []
           end
         else
           css_id = 'td_day'
         end
-        
-        tmp_res.push([css_id, target.mday])
+        css_id = marker(target) || css_id
+        day    = anchor(target) || target.mday
+        tmp_res.push([css_id, day])
       end
       
       res.push(tmp_res)
@@ -78,13 +81,14 @@ module JPCalendar
       if self.options[:markers].nil? || (self.options.class == Array && self.options.empty?)
         return nil
       end
+
       markers = self.options[:markers]
       if markers.class == Date || markers.class == DateTime
         markers = [markers]
       elsif markers.class == String
         markers = DateTimeWraper.parse(markers)
       end
-      
+
       if markers.map{|m| m.strftime('%Y%m%d')}.include?(date.ymd)
         return 'td_day_mark'
       else

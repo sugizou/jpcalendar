@@ -73,15 +73,11 @@ td #td_day_mark {
 </script>
 '
     
-    CALENDAR_WEEKNAMES = [
-                          ['Sun', 'Sunday',    '日', '日曜日'],
-                          ['Mon', 'Monday',    '月', '月曜日'],
-                          ['Tue', 'Tuesday',   '火', '火曜日'],
-                          ['Wed', 'Wednesday', '水', '水曜日'],
-                          ['Thu', 'Thursday',  '木', '木曜日'],
-                          ['Fri', 'Friday',    '金', '金曜日'],
-                          ['Sat', 'Saturday',  '土', '土曜日'],             
-                         ]
-    
+    WEEKNAMES = [
+                 ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                 ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                 ['日', '月', '火', '水', '木', '金',  '土'],
+                 ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日']
+                ]    
   end 
 end

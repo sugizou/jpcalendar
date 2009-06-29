@@ -53,25 +53,22 @@ describe "Template" do
       end
     end
     
-    describe '定数CALENDAR_WEEKNAMESは' do 
+    describe '定数WEEKNAMESは' do 
       it '空およびnilではない' do 
-        JPCalendar::Template::CALENDAR_WEEKNAMES.should_not be_nil
-        JPCalendar::Template::CALENDAR_WEEKNAMES.should_not == ''
+        JPCalendar::Template::WEEKNAMES.should_not be_nil
+        JPCalendar::Template::WEEKNAMES.should_not == ''
       end
       
       it 'arrayであり、要素は7つである' do 
-        JPCalendar::Template::CALENDAR_WEEKNAMES.class.should == Array
-        JPCalendar::Template::CALENDAR_WEEKNAMES.size == 7
+        JPCalendar::Template::WEEKNAMES.class.should == Array
+        JPCalendar::Template::WEEKNAMES.size == 7
       end
       
       it '各要素の中身は英語(略称)、英語(フル)、日本語(略称)、日本語(フル)の曜日名が入ったarray' do
-        JPCalendar::Template::CALENDAR_WEEKNAMES[0].should == ['Sun','Sunday','日','日曜日']
-        JPCalendar::Template::CALENDAR_WEEKNAMES[1].should == ['Mon','Monday','月','月曜日']
-        JPCalendar::Template::CALENDAR_WEEKNAMES[2].should == ['Tue','Tuesday','火','火曜日']
-        JPCalendar::Template::CALENDAR_WEEKNAMES[3].should == ['Wed','Wednesday','水','水曜日']
-        JPCalendar::Template::CALENDAR_WEEKNAMES[4].should == ['Thu','Thursday','木','木曜日']
-        JPCalendar::Template::CALENDAR_WEEKNAMES[5].should == ['Fri','Friday','金','金曜日']
-        JPCalendar::Template::CALENDAR_WEEKNAMES[6].should == ['Sat','Saturday','土','土曜日']
+        JPCalendar::Template::WEEKNAMES[0].should == ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+        JPCalendar::Template::WEEKNAMES[1].should == ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+        JPCalendar::Template::WEEKNAMES[2].should == ['日', '月', '火', '水', '木', '金',  '土']
+        JPCalendar::Template::WEEKNAMES[3].should == ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日']
       end
     end
   end

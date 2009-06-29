@@ -17,6 +17,10 @@ class DateTimeWrapper < DateTime
   def hms(sep = '')
     self.strftime("%H#{sep}%M#{sep}%S")
   end
+
+  def ym(sep = '')
+    self.strftime("%Y#{sep}%m")
+  end
   
   def datetime(date_sep = '', time_sep = '')
     if (date_sep.nil? || date_sep == '')  && (time_sep.nil? || time_sep == '')

@@ -34,7 +34,21 @@ describe DateTimeWrapper do
       @datetime.ymd('-').should == '2009-02-28'
     end
   end
-
+  
+  describe 'ymメソッドは' do
+    before(:all) do 
+      @datetime = DateTimeWrapper.parse('2009-02-28 12:34:56+0900')
+    end
+    
+    it 'yyyymmの形で返す' do 
+      @datetime.ym.should == '200902'
+    end
+    
+    it '引数を渡すとその文字でセパレートされる' do 
+      @datetime.ym('/').should == '2009/02'
+    end
+  end
+  
   describe 'hmsメソッドは' do 
     before(:all) do 
       @datetime = DateTimeWrapper.parse('2009-02-28 12:34:56+0900')

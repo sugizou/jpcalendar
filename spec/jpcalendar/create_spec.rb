@@ -347,7 +347,56 @@ describe JPCalendar::Create do
     end
   end
   
-  describe "header" do 
+  describe "menubarメソッドは" do
+    
+    before(:all) do 
+      @date = DateTimeWrapper.now
+    end
+    
+    it "デフォルトでカレンダー上部に表示される先月/今月/来月の表示とリンクに必要なデータを配列で返す" do 
+      @create.menubar(@date).should == [
+                                       "<a href=\"?date=#{(@date << 1).ym('-')}\">#{(@date << 1).ym('/')}</a>",
+                                       @date.ym('/'),
+                                       "<a href=\"?date=#{(@date >> 1).ym('-')}\">#{(@date >> 1).ym('/')}</a>"
+                                      ]
+    end
+    
+    describe "optionsがあるとき" do 
+      it "prev_str,current_str,next_strは前の月/今月/次の月の表示文字を変更できる" do 
+        @create = JPCalendar::Create.new(:prev_str => '先月', :next_str => '来月', :current_str => '今月')
+        @create.menubar(@date).should == [
+                                         "<a href=\"?date=#{(@date << 1).ym('-')}\">先月</a>",
+                                         '今月',
+                                         "<a href=\"?date=#{(@date >> 1).ym('-')}\">来月</a>"
+                                        ]
+      end
+      
+      it "prev_href,next_hrefは前の月/次の月のリンクにくっつけるクエリパラメータ。key => valセットのハッシュ" do 
+        @create = JPCalendar::Create.new(
+                                         :prev_href => { :created_at => (@date << 1).ym('/') },
+                                         :next_href => { :created_at => (@date >> 1).ym('/') }
+                                         )
+
+        @create.menubar(@date).should == [
+                                         "<a href=\"?created_at=#{(@date << 1).ym('/')}\">#{(@date << 1).ym('/')}</a>",
+                                         @date.ym('/'),
+                                         "<a href=\"?created_at=#{(@date >> 1).ym('/')}\">#{(@date >> 1).ym('/')}</a>"
+                                        ]
+      end
+      
+      it "other_paramsは前の月/次の月につけるその他のパラメータ。key => valセットのハッシュ" do 
+        @create = JPCalendar::Create.new(
+                                         :other_params => { 
+                                           :hoge => 1,
+                                         }
+                                         )
+        
+        @create.menubar(@date).should == [
+                                          "<a href=\"?date=#{(@date << 1).ym('-')}&hoge=1\">#{(@date << 1).ym('/')}</a>",
+                                          @date.ym('/'),
+                                          "<a href=\"?date=#{(@date >> 1).ym('-')}&hoge=1\">#{(@date >> 1).ym('/')}</a>",
+                                         ]
+      end
+    end
   end
-  
 end

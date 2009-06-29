@@ -59,7 +59,26 @@ module JPCalendar
       res.push(tmp_res)
       res
     end
-    
+
+    def menubar(date)
+      if date.class == String
+        date = DateTimeWrapper.parse(date)
+      end
+
+      prev_str    = options[:prev_str] || (date << 1).ym('/')
+      next_str    = options[:next_str] || (date >> 1).ym('/')
+      current_str = options[:current_str] || date.ym('/')
+      
+      params      = options[:other_params] || { }
+      prev_param  = options[:prev_href] || { :date => (date << 1).ym('-')}
+      next_param  = options[:next_href] || { :date => (date >> 1).ym('-')}
+      
+      prev_href  = '?' + params.merge(prev_param).to_query
+      next_href  = '?' + params.merge(next_param).to_query
+      
+      [sprintf(JPCalendar::Template::LINK, prev_href, prev_str), current_str, sprintf(JPCalendar::Template::LINK, next_href, next_str)]
+    end
+
     private
     def anchor(date)
       if self.options[:model].nil? || self.options[:model].class != Array || self.options[:model].empty?
@@ -95,5 +114,15 @@ module JPCalendar
         return nil
       end
     end
+  end
+end
+
+class Hash
+  def to_query
+    param = []
+    self.each do |key,val|
+      param.push("#{key}=#{val}")
+    end
+    param.join('&')
   end
 end

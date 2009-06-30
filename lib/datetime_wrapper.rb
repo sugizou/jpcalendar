@@ -1,5 +1,3 @@
-require 'date'
-
 class DateTimeWrapper < DateTime
   
   def self.parse(date)

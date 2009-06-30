@@ -9,6 +9,122 @@ describe JPCalendar::Create do
     @create = JPCalendar::Create.new({ })
   end
   
+  describe "baseメソッドは" do 
+    it "カレンダーのベースデータを生成する(first_week,last_weekと処理が違いますが同期は取れてます。いずれfirst_week(),last_week(),other_weeks()は消す予定です)" do
+      date = DateTimeWrapper.parse('2009-06-30')
+      bases = @create.base(date)
+      bases[0][0].should == ['td_holiday_unactive', 31]
+      bases[0][1].should == ['td_day', 1]
+      bases[0][2].should == ['td_day', 2]
+      bases[0][3].should == ['td_day', 3]
+      bases[0][4].should == ['td_day', 4]
+      bases[0][5].should == ['td_day', 5]
+      bases[0][6].should == ['td_day', 6]
+
+      bases[1][0].should == ['td_holiday', 7]
+      bases[1][1].should == ['td_day', 8]
+      bases[1][2].should == ['td_day', 9]
+      bases[1][3].should == ['td_day', 10]
+      bases[1][4].should == ['td_day', 11]
+      bases[1][5].should == ['td_day', 12]
+      bases[1][6].should == ['td_day', 13]
+
+      bases[2][0].should == ['td_holiday', 14]
+      bases[2][1].should == ['td_day', 15]
+      bases[2][2].should == ['td_day', 16]
+      bases[2][3].should == ['td_day', 17]
+      bases[2][4].should == ['td_day', 18]
+      bases[2][5].should == ['td_day', 19]
+      bases[2][6].should == ['td_day', 20]
+
+      bases[3][0].should == ['td_holiday', 21]
+      bases[3][1].should == ['td_day', 22]
+      bases[3][2].should == ['td_day', 23]
+      bases[3][3].should == ['td_day', 24]
+      bases[3][4].should == ['td_day', 25]
+      bases[3][5].should == ['td_day', 26]
+      bases[3][6].should == ['td_day', 27]
+
+      bases[4][0].should == ['td_holiday', 28]
+      bases[4][1].should == ['td_day', 29]
+      bases[4][2].should == ['td_day', 30]
+      bases[4][3].should == ['td_day_unactive', 1]
+      bases[4][4].should == ['td_day_unactive', 2]
+      bases[4][5].should == ['td_day_unactive', 3]
+      bases[4][6].should == ['td_day_unactive', 4]
+    end
+    
+    it "String/Fixnum/Date/DateTimeオブジェクトの引数にも対応している" do
+      @create.base('2009-06-01').should == @create.base(DateTimeWrapper.parse('2009-06-01'))
+      @create.base(20090601).should == @create.base(DateTimeWrapper.parse('2009-06-01'))
+      @create.base(Date.parse('2009-06-01')).should == @create.base(DateTimeWrapper.parse('2009-06-01'))
+      @create.base(DateTime.parse('2009-06-01')).should == @create.base(DateTimeWrapper.parse('2009-06-01'))
+    end
+    
+    it "first_week(),last_wekk(),other_weeks()と同期が取れてるかのテスト" do 
+      date = DateTimeWrapper.now
+      first = date.first
+      last  = date.last
+      @create.base(date).should == @create.other_weeks(first,last).unshift(@create.first_week(first)).push(@create.last_week(last))
+    end
+    
+    describe "optionsにmodelとmethodが指定されている場合" do 
+      it "その値を見て一致すればリンクを張る" do 
+        class SampleModel
+          attr_accessor :created_at
+          
+          def initialize(date)
+            @created_at = date
+          end
+        end
+        
+        models = ['2009-05-20','2009-05-31','2009-06-02', '2009-06-18', '2009-06-28'].map{|d| SampleModel.new(DateTime.parse(d)) }
+        @create = JPCalendar::Create.new(:model => models, :method => :created_at)
+
+        bases = @create.base('2009-06-12')
+        bases[0][0].should == ['td_holiday_unactive', '<a href="?created_at=20090531">31</a>']
+        bases[0][1].should == ['td_day', 1]
+        bases[0][2].should == ['td_day', '<a href="?created_at=20090602">2</a>']
+        bases[0][3].should == ['td_day', 3]
+        bases[0][4].should == ['td_day', 4]
+        bases[0][5].should == ['td_day', 5]
+        bases[0][6].should == ['td_day', 6]
+        
+        bases[2][0].should == ['td_holiday', 14]
+        bases[2][1].should == ['td_day', 15]
+        bases[2][2].should == ['td_day', 16]
+        bases[2][3].should == ['td_day', 17]
+        bases[2][4].should == ['td_day', '<a href="?created_at=20090618">18</a>']
+        bases[2][5].should == ['td_day', 19]
+        bases[2][6].should == ['td_day', 20]
+
+        bases[4][0].should == ['td_holiday', '<a href="?created_at=20090628">28</a>']
+        bases[4][1].should == ['td_day', 29]
+        bases[4][2].should == ['td_day', 30]
+        bases[4][3].should == ['td_day_unactive', 1]
+        bases[4][4].should == ['td_day_unactive', 2]
+        bases[4][5].should == ['td_day_unactive', 3]
+        bases[4][6].should == ['td_day_unactive', 4]
+      end
+    end
+    
+    describe "optionsにmarkersが指定されている場合" do 
+      it "指定された日のcssのid名を変える" do 
+        markers = [Date.parse('2009-06-29')]
+        @create = JPCalendar::Create.new(:markers => markers)
+        bases   = @create.base(DateTimeWrapper.parse('2009-06-12'))
+        
+        bases[4][0].should == ['td_holiday', 28]
+        bases[4][1].should == ['td_day_mark', 29]
+        bases[4][2].should == ['td_day', 30]
+        bases[4][3].should == ['td_day_unactive', 1]
+        bases[4][4].should == ['td_day_unactive', 2]
+        bases[4][5].should == ['td_day_unactive', 3]
+        bases[4][6].should == ['td_day_unactive', 4]
+      end
+    end
+  end
+  
   describe "first_weekメソッドは" do
     it "cssのid名と日付がセットになった二次元配列を返す。2009年6月" do
       first_date = DateTimeWrapper.parse('2009-06-01')      
@@ -380,7 +496,7 @@ describe JPCalendar::Create do
         @create.menubar(@date).should == [
                                          "<a href=\"?created_at=#{(@date << 1).ym('/')}\">#{(@date << 1).ym('/')}</a>",
                                          @date.ym('/'),
-                                         "<a href=\"?created_at=#{(@date >> 1).ym('/')}\">#{(@date >> 1).ym('/')}</a>"
+                                          "<a href=\"?created_at=#{(@date >> 1).ym('/')}\">#{(@date >> 1).ym('/')}</a>"
                                         ]
       end
       

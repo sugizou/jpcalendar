@@ -1,11 +1,36 @@
 module JPCalendar
   class Create 
     
-    attr_accessor :options, :datetime
+    attr_accessor :options
     
     def initialize(options = { })
       options = { } unless options.class == Hash
       @options = options
+    end
+    
+    def base(date)
+      date = replace_date_obj(date)
+      first_date = date.first
+      first_date = first_date - first_date.wday
+      last_date  = date.last
+      last_date  = last_date + (6 - last_date.wday)
+      
+      week = []
+      month = []
+      (last_date - first_date + 1).to_i.times do |cnt|
+        target = first_date + cnt
+        css  = target.wday == 0 ? 'td_holiday' : 'td_day'
+        css += date.month != target.month ? '_unactive' : ''
+        css = marker(target) || css
+        day = anchor(target) || target.mday
+        week.push([css, day])
+        
+        if target.wday % 7 == 6
+          month.push(week)
+          week = []
+        end
+      end
+      return month
     end
     
     def first_week(first_date)
@@ -112,6 +137,16 @@ module JPCalendar
         return 'td_day_mark'
       else
         return nil
+      end
+    end
+    
+    def replace_date_obj(date)
+      if date.class == String || date.class == Fixnum
+        return DateTimeWrapper.parse(date.to_s)
+      elsif date.class == Date || date.class == DateTime
+        return DateTimeWrapper.parse(date.to_s)
+      elsif date.class == DateTimeWrapper
+        return date
       end
     end
   end

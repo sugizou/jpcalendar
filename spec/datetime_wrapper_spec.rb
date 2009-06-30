@@ -88,9 +88,9 @@ describe DateTimeWrapper do
     
     it 'その月の最初の年月日を返す' do 
       datetime = DateTime.parse(sprintf('%04d-%02d-%02d',DateTime.now.year, DateTime.now.month, 1))
-      DateTimeWrapper.first.to_s.should == datetime.to_s
-      DateTimeWrapper.first.ymd.to_s.should == datetime.strftime('%Y%m%d')
-      DateTimeWrapper.first.datetime.to_s.should == datetime.strftime('%Y%m%d%H%M%S')
+      DateTimeWrapper.now.first.to_s.should == datetime.to_s
+      DateTimeWrapper.now.first.ymd.to_s.should == datetime.strftime('%Y%m%d')
+      DateTimeWrapper.now.first.datetime.to_s.should == datetime.strftime('%Y%m%d%H%M%S')
     end
   end
   
@@ -98,9 +98,9 @@ describe DateTimeWrapper do
     it 'その月の最後の年月日を返す' do 
       datetime = DateTime.parse(sprintf('%04d-%02d-%02d',DateTime.now.year, DateTime.now.month, 1))
       datetime = (datetime >> 1) - 1
-      DateTimeWrapper.last.to_s == datetime.to_s
-      DateTimeWrapper.last.ymd.to_s.should == datetime.strftime('%Y%m%d')
-      DateTimeWrapper.last.datetime.to_s.should == datetime.strftime('%Y%m%d%H%M%S')
+      DateTimeWrapper.now.last.to_s == datetime.to_s
+      DateTimeWrapper.now.last.ymd.to_s.should == datetime.strftime('%Y%m%d')
+      DateTimeWrapper.now.last.datetime.to_s.should == datetime.strftime('%Y%m%d%H%M%S')
     end
   end
 end

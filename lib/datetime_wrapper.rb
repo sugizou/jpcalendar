@@ -30,16 +30,14 @@ class DateTimeWrapper < DateTime
     end
   end
   
-  def self.first
-    obj = DateTimeWrapper.now
-    obj = obj - obj.mday + 1
-    DateTimeWrapper.parse(obj.ymd('-'))
+  def first
+    obj = self - self.mday + 1
+    DateTimeWrapper.parse(sprintf('%04d-%02d-%02d', obj.year, obj.month, obj.mday))
   end
   
-  def self.last
-    obj = DateTimeWrapper.now
-    obj = obj - obj.mday + 1
-    DateTimeWrapper.parse(((obj >> 1) - 1).ymd('-'))
+  def last
+    obj = ((self - self.mday + 1) >>  1) - 1
+    DateTimeWrapper.parse(sprintf('%04d-%02d-%02d', obj.year, obj.month, obj.mday))
   end
 end
 
